@@ -3,190 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Copy & Print - Admin Panel</title>
+    <title>Min Copy & Print - All in One</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; font-family: 'Pyidaungsu', sans-serif; margin: 0; padding: 0; }
-        body { background-color: #f5f5f5; padding-bottom: 80px; }
+        * { box-sizing: border-box; font-family: sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f4f4f4; padding-bottom: 70px; }
         
-        /* Header Style */
-        .header {
-            background-color: #ff9800;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        /* Header */
+        .header { 
+            background: #ff9800; color: white; padding: 15px; 
+            text-align: center; font-size: 20px; font-weight: bold; 
+            position: sticky; top: 0; z-index: 100;
         }
 
-        /* Container */
-        .container { padding: 15px; }
-        .section-title { color: #555; font-size: 18px; margin: 10px 0; display: flex; align-items: center; gap: 8px; }
+        .container { padding: 15px; display: none; }
+        .container.active { display: block; }
 
-        /* Button Card Style (အပြင်ကပုံစံအတိုင်း) */
-        .custom-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #333;
+        /* Home Page - Grid Style (2 Columns) */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .rect-card {
+            background: white; border-radius: 12px; padding: 15px 5px;
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: #333; border: 1px solid #eee;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.2s;
-            border: 1px solid #eee;
         }
-        .custom-card:active { transform: scale(0.97); background: #fffbf5; }
-        .card-icon { font-size: 24px; color: #ff9800; width: 40px; }
-        .card-text { flex-grow: 1; font-size: 16px; font-weight: 500; }
-        .card-arrow { color: #ff9800; font-size: 18px; }
+        .btn-img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; margin-bottom: 8px; }
+        .btn-name { font-size: 14px; font-weight: bold; color: #444; }
 
-        /* Setting Form Style */
-        .setting-box {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border: 2px dashed #ff9800;
+        /* Setting Page Styles */
+        .form-box { background: white; padding: 15px; border-radius: 12px; border: 2px dashed #ff9800; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .save-btn { background: #ff9800; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; }
+        
+        .manage-item { 
+            background: white; padding: 10px; border-radius: 8px; 
+            display: flex; align-items: center; margin-bottom: 8px; border: 1px solid #eee;
         }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            outline: none;
-        }
-        .save-btn {
-            background: #ff9800;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        .manage-img { width: 35px; height: 35px; border-radius: 5px; margin-right: 10px; }
+        .del-btn { margin-left: auto; color: #ff4444; border: none; background: none; font-size: 18px; }
 
-        /* Delete Button */
-        .del-btn { color: #ff4444; font-size: 14px; margin-top: 5px; cursor: pointer; display: block; }
-
-        /* Bottom Nav (ပုံထဲကအတိုင်း) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px;
-            border-top: 1px solid #ddd;
+        /* Bottom Nav */
+        .bottom-nav { 
+            position: fixed; bottom: 0; width: 100%; background: white; 
+            display: flex; justify-content: space-around; padding: 10px; 
+            border-top: 1px solid #ddd; z-index: 100;
         }
-        .nav-item { text-align: center; color: #888; font-size: 12px; text-decoration: none; }
+        .nav-item { text-align: center; color: #888; font-size: 12px; text-decoration: none; flex: 1; cursor: pointer; }
         .nav-item.active { color: #ff9800; }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="header">Min Copy & Print</div>
+    <div class="header" id="page-title">Min Copy & Print</div>
 
-    <div class="container">
-        <div class="section-title"><i class="fa-solid fa-wrench"></i> ဆက်တင်များ</div>
+    <div id="home-section" class="container active">
+        <div class="button-grid" id="button-display">
+            </div>
+    </div>
 
-        <div id="button-list"></div>
-
-        <div class="setting-box">
-            <h4 style="margin-bottom: 10px; color: #ff9800;">Button အသစ်ထည့်ရန်</h4>
-            <input type="text" id="btnName" placeholder="Button အမည် (ဥပမာ- Facebook)">
-            <input type="text" id="btnUrl" placeholder="Link (ဥပမာ- https://...)">
-            
-            <label style="font-size: 12px; color: #666;">Icon ရွေးချယ်ပါ -</label>
-            <select id="btnIcon">
-                <option value="fa-solid fa-link">🔗 Link</option>
-                <option value="fa-brands fa-facebook">🔵 Facebook</option>
-                <option value="fa-brands fa-messenger">💬 Messenger</option>
-                <option value="fa-brands fa-viber">🟣 Viber</option>
-                <option value="fa-brands fa-telegram">✈️ Telegram</option>
-                <option value="fa-solid fa-globe">🌐 Website</option>
-                <option value="fa-solid fa-shop">🏪 Shop</option>
-                <option value="fa-solid fa-credit-card">💳 Payment</option>
-            </select>
-
-            <button class="save-btn" onclick="saveLink()">+ Button အသစ်ထည့်မည်</button>
+    <div id="setting-section" class="container">
+        <div class="form-box">
+            <h4 style="color:#ff9800; margin-bottom:10px;">Button အသစ်ထည့်ရန်</h4>
+            <input type="text" id="btnName" placeholder="အမည် (ဥပမာ- Facebook)">
+            <input type="text" id="btnUrl" placeholder="Link (https://...)">
+            <label style="font-size:12px;">ပုံရွေးပါ -</label>
+            <input type="file" id="btnFile" accept="image/*">
+            <button class="save-btn" onclick="saveLink()">သိမ်းဆည်းမည်</button>
         </div>
+        <div id="manage-list"></div>
     </div>
 
     <div class="bottom-nav">
-        <a href="#" class="nav-item"><i class="fa-solid fa-calculator"></i>အရောင်း</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-history"></i>မှတ်တမ်း</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-file-invoice"></i>Voucher</a>
-        <a href="#" class="nav-item active"><i class="fa-solid fa-gear"></i>ပြင်ဆင်ရန်</a>
+        <div class="nav-item active" onclick="showPage('home')">
+            <i class="fa-solid fa-house"></i>ပင်မ
+        </div>
+        <div class="nav-item" onclick="showPage('setting')">
+            <i class="fa-solid fa-gear"></i>ပြင်ဆင်ရန်
+        </div>
     </div>
 
     <script>
-        // Data သိမ်းဖို့နဲ့ ပြန်ပြဖို့ Function
-        function renderButtons() {
-            const listContainer = document.getElementById('button-list');
-            const data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
-            
-            listContainer.innerHTML = '';
+        // စာမျက်နှာ အကူးအပြောင်းလုပ်ရန်
+        function showPage(page) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-            data.forEach((item, index) => {
-                listContainer.innerHTML += `
-                    <div>
-                        <a href="${item.url}" class="custom-card" target="_blank">
-                            <div class="card-icon"><i class="${item.icon}"></i></div>
-                            <div class="card-text">${item.name}</div>
-                            <div class="card-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                        </a>
-                        <span class="del-btn" onclick="deleteLink(${index})">[ ဖျက်ရန် ]</span>
-                    </div>
-                `;
-            });
+            if (page === 'home') {
+                document.getElementById('home-section').classList.add('active');
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+                document.getElementById('page-title').innerText = "Min Copy & Print";
+                loadHomeButtons();
+            } else {
+                document.getElementById('setting-section').classList.add('active');
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+                document.getElementById('page-title').innerText = "ပြင်ဆင်ရန်";
+                loadManageList();
+            }
         }
 
         // Link အသစ်သိမ်းရန်
         function saveLink() {
             const name = document.getElementById('btnName').value;
             const url = document.getElementById('btnUrl').value;
-            const icon = document.getElementById('btnIcon').value;
+            const fileInput = document.getElementById('btnFile');
 
-            if(!name || !url) {
-                alert("အချက်အလက် အပြည့်အစုံထည့်ပါ");
-                return;
-            }
+            if (!name || !url || !fileInput.files[0]) return alert("အချက်အလက်အားလုံး ထည့်သွင်းပါ");
 
-            const data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
-            data.push({ name, url, icon });
-            localStorage.setItem('minPrintLinks', JSON.stringify(data));
-
-            // Input တွေကို ပြန်ရှင်းမယ်
-            document.getElementById('btnName').value = '';
-            document.getElementById('btnUrl').value = '';
-            
-            renderButtons();
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                const data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
+                data.push({ name, url, image: imageData });
+                localStorage.setItem('minPrintLinks', JSON.stringify(data));
+                
+                document.getElementById('btnName').value = '';
+                document.getElementById('btnUrl').value = '';
+                document.getElementById('btnFile').value = '';
+                alert("သိမ်းပြီးပါပြီ");
+                loadManageList();
+            };
+            reader.readAsDataURL(fileInput.files[0]);
         }
 
-        // Link ပြန်ဖျက်ရန်
-        function deleteLink(index) {
-            if(confirm("ဖျက်မှာ သေချာပါသလား?")) {
+        // Home Page မှာ Button ပြရန်
+        function loadHomeButtons() {
+            const container = document.getElementById('button-display');
+            const data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
+            container.innerHTML = data.length === 0 ? '<p style="grid-column: span 2; text-align:center; color:#999; padding-top:20px;">Button မရှိသေးပါ။</p>' : '';
+            
+            data.forEach(item => {
+                container.innerHTML += `
+                    <a href="${item.url}" class="rect-card" target="_blank">
+                        <img src="${item.image}" class="btn-img">
+                        <span class="btn-name">${item.name}</span>
+                    </a>
+                `;
+            });
+        }
+
+        // Setting Page မှာ List ပြရန်
+        function loadManageList() {
+            const container = document.getElementById('manage-list');
+            const data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
+            container.innerHTML = '<h4 style="margin-bottom:10px;">လက်ရှိ Button များ</h4>';
+            
+            data.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="manage-item">
+                        <img src="${item.image}" class="manage-img">
+                        <div style="font-size:14px;"><b>${item.name}</b></div>
+                        <button class="del-btn" onclick="deleteItem(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        // ဖျက်ရန်
+        function deleteItem(index) {
+            if (confirm("ဖျက်မှာ သေချာလား?")) {
                 let data = JSON.parse(localStorage.getItem('minPrintLinks') || '[]');
                 data.splice(index, 1);
                 localStorage.setItem('minPrintLinks', JSON.stringify(data));
-                renderButtons();
+                loadManageList();
             }
         }
 
-        // စဖွင့်တာနဲ့ Button တွေဆွဲတင်မယ်
-        window.onload = renderButtons;
+        // စဖွင့်ဖွင့်ချင်း Home ကို ပြရန်
+        window.onload = loadHomeButtons;
     </script>
-
 </body>
 </html>
 
+                
