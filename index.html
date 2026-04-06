@@ -3,180 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Link Hub</title>
     <style>
-        :root {
-            --primary-orange: #ff9100;
-            --dark-bg: #2c264d;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
+        /* Screen တစ်ခုလုံးကို လိမ္မော်ရောင်ဖြစ်စေရန် */
+        body, html {
             margin: 0;
-        }
-
-        /* Phone UI */
-        .phone {
-            width: 360px;
-            min-height: 640px;
-            background: var(--dark-bg);
-            border-radius: 40px;
-            padding: 10px;
-            border: 5px solid #222;
-            position: relative;
-        }
-
-        .screen {
-            background: linear-gradient(180deg, #ff9100 0%, #e67e22 100%);
+            padding: 0;
             height: 100%;
-            border-radius: 30px;
-            padding: 20px;
+            width: 100%;
+            font-family: sans-serif;
+            background-color: #FF8C00; /* လိမ္မော်ရောင် */
+            overflow: hidden;
+        }
+
+        .container {
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        h2 { color: white; margin-top: 10px; }
-
-        /* Links Container */
-        #linkContainer {
-            margin-top: 20px;
-            flex-grow: 1;
+        .header {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
         }
 
-        .btn-card {
+        /* Card ပုံစံ */
+        .card {
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 15px;
             border-radius: 15px;
-            margin-bottom: 10px;
-            text-decoration: none;
-            display: block;
+            padding: 20px;
             color: white;
             position: relative;
         }
 
-        .btn-card b { display: block; font-size: 1.1em; }
-        .btn-card span { font-size: 0.8em; opacity: 0.9; }
-
-        /* Setting Modal */
-        #settingModal {
-            display: none;
+        .remove-btn {
             position: absolute;
-            top: 50px; left: 20px; right: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 100;
+            bottom: 10px;
+            right: 15px;
+            color: #ff4d4d;
+            font-size: 12px;
+            text-decoration: none;
         }
 
-        input {
-            width: 100%; padding: 10px; margin: 5px 0 15px;
-            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+        /* Setting ကို အောက်ခြေမှာ Feature တစ်ခုအနေနဲ့ ထားရန် */
+        .footer-settings {
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 20px;
         }
 
-        .save-btn {
-            background: var(--dark-bg); color: white; border: none;
-            width: 100%; padding: 12px; border-radius: 8px; cursor: pointer;
+        .settings-button {
+            background-color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
 
-        .gear-btn {
-            position: absolute; bottom: 25px; right: 25px;
-            background: white; width: 50px; height: 50px;
-            border-radius: 50%; display: flex; justify-content: center;
-            align-items: center; cursor: pointer; font-size: 24px;
-        }
-
-        .delete-btn {
-            color: #ff4d4d; font-size: 0.7em; cursor: pointer; margin-top: 5px; text-align: right;
+        .settings-button img {
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
 <body>
 
-<div class="phone">
-    <div class="screen">
-        <h2>Other Screen</h2>
-        
-        <div id="linkContainer">
+    <div class="container">
+        <div class="header">Other Screen</div>
+
+        <div class="card">
+            <div style="font-weight: bold; font-size: 18px;">min</div>
+            <div style="opacity: 0.8;">Thank</div>
+            <a href="#" class="remove-btn">Remove [x]</a>
+        </div>
+
+        <div class="footer-settings">
+            <div class="settings-button">
+                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Settings">
             </div>
-
-        <div class="gear-btn" onclick="toggleSetting()">⚙️</div>
+        </div>
     </div>
-
-    <div id="settingModal">
-        <h3>Add New Link</h3>
-        <input type="text" id="title" placeholder="Title (e.g. Facebook)">
-        <input type="text" id="desc" placeholder="Description (e.g. Visit our page)">
-        <input type="text" id="url" placeholder="URL (https://...)">
-        <button class="save-btn" onclick="saveLink()">Save & Add</button>
-        <button onclick="toggleSetting()" style="background:none; border:none; color:grey; width:100%; margin-top:10px; cursor:pointer;">Close</button>
-    </div>
-</div>
-
-<script>
-    // စစချင်းမှာ Save ထားတာတွေကို ဆွဲထုတ်မယ်
-    document.addEventListener("DOMContentLoaded", loadLinks);
-
-    function toggleSetting() {
-        const modal = document.getElementById('settingModal');
-        modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function saveLink() {
-        const title = document.getElementById('title').value;
-        const desc = document.getElementById('desc').value;
-        const url = document.getElementById('url').value;
-
-        if(!title || !url) return alert("Title နဲ့ URL ထည့်ပေးပါ");
-
-        const newLink = { title, desc, url, id: Date.now() };
-
-        // Local Storage မှာ သိမ်းမယ်
-        let links = JSON.parse(localStorage.getItem('myLinks')) || [];
-        links.push(newLink);
-        localStorage.setItem('myLinks', JSON.stringify(links));
-
-        renderLinks();
-        toggleSetting();
-        
-        // Input တွေကို ရှင်းမယ်
-        document.getElementById('title').value = '';
-        document.getElementById('desc').value = '';
-        document.getElementById('url').value = '';
-    }
-
-    function loadLinks() {
-        renderLinks();
-    }
-
-    function renderLinks() {
-        const container = document.getElementById('linkContainer');
-        const links = JSON.parse(localStorage.getItem('myLinks')) || [];
-        
-        container.innerHTML = links.map(link => `
-            <div style="margin-bottom: 10px;">
-                <a href="${link.url}" target="_blank" class="btn-card">
-                    <b>${link.title}</b>
-                    <span>${link.desc}</span>
-                </a>
-                <div class="delete-btn" onclick="deleteLink(${link.id})">Remove [x]</div>
-            </div>
-        `).join('');
-    }
-
-    function deleteLink(id) {
-        let links = JSON.parse(localStorage.getItem('myLinks')) || [];
-        links = links.filter(link => link.id !== id);
-        localStorage.setItem('myLinks', JSON.stringify(links));
-        renderLinks();
-    }
-</script>
 
 </body>
 </html>
+
