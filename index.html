@@ -3,95 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Screen တစ်ခုလုံးကို လိမ္မော်ရောင်ဖြစ်စေရန် */
-        body, html {
+        body {
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: sans-serif;
-            background-color: #FF8C00; /* လိမ္မော်ရောင် */
-            overflow: hidden;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
+            background-color: #f8f9fa;
+            font-family: 'Pyidaungsu', sans-serif; /* မြန်မာစာအတွက် */
         }
 
         .header {
+            background-color: #FF8C00;
             color: white;
-            font-size: 24px;
+            text-align: center;
+            padding: 15px;
+            font-size: 22px;
             font-weight: bold;
-            margin-bottom: 30px;
         }
 
-        /* Card ပုံစံ */
-        .card {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            position: relative;
+        .section-title {
+            padding: 20px 15px 10px;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .remove-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            color: #ff4d4d;
+        .settings-container {
+            padding: 10px 15px;
+        }
+
+        /* Button ပုံစံ Card များ */
+        .setting-item {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: #000000; /* စာသားအနက်ရောင် */
+            border: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .item-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-left i {
+            color: #FF8C00;
+            font-size: 20px;
+        }
+
+        .item-left span {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .fa-chevron-right {
+            color: #FF8C00;
+            font-size: 14px;
+        }
+
+        /* Add New Button */
+        .add-btn {
+            border: 2px dashed #FF8C00;
+            background: transparent;
+            justify-content: center;
+            color: #FF8C00;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #888;
             font-size: 12px;
             text-decoration: none;
         }
 
-        /* Setting ကို အောက်ခြေမှာ Feature တစ်ခုအနေနဲ့ ထားရန် */
-        .footer-settings {
-            margin-top: auto;
-            display: flex;
-            justify-content: center;
-            padding-bottom: 20px;
+        .nav-item.active {
+            color: #FF8C00;
         }
 
-        .settings-button {
-            background-color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
-
-        .settings-button img {
-            width: 30px;
-            height: 30px;
+        .nav-item i {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 3px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">Other Screen</div>
+    <div class="header">Min Copy & Print</div>
 
-        <div class="card">
-            <div style="font-weight: bold; font-size: 18px;">min</div>
-            <div style="opacity: 0.8;">Thank</div>
-            <a href="#" class="remove-btn">Remove [x]</a>
-        </div>
+    <div class="section-title">
+        <i class="fas fa-tools"></i> ဆက်တင်များ
+    </div>
 
-        <div class="footer-settings">
-            <div class="settings-button">
-                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Settings">
+    <div class="settings-container">
+        <a href="edit-info.html" class="setting-item">
+            <div class="item-left">
+                <i class="fas fa-store"></i>
+                <span>ဆိုင်အချက်အလက်</span>
             </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <a href="edit-payment.html" class="setting-item">
+            <div class="item-left">
+                <i class="fas fa-credit-card"></i>
+                <span>ငွေပေးချေမှု & QR</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <a href="manage-items.html" class="setting-item">
+            <div class="item-left">
+                <i class="fas fa-tags"></i>
+                <span>ပစ္စည်းများ စီမံရန်</span>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+
+        <div class="setting-item add-btn" onclick="addNewButton()">
+            <i class="fas fa-plus-circle"></i>
+            <span style="margin-left: 10px;">Button အသစ်ထည့်ရန်</span>
         </div>
     </div>
 
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <i class="fas fa-calculator"></i> အရောင်း
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-history"></i> မှတ်တမ်း
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-file-invoice"></i> Voucher
+        </div>
+        <div class="nav-item active">
+            <i class="fas fa-cog"></i> ပြင်ဆင်ရန်
+        </div>
+    </div>
+
+    <script>
+        function addNewButton() {
+            let name = prompt("Button အမည် ထည့်ပါ:");
+            if (name) {
+                alert(name + " button ကို ထည့်သွင်းလိုက်ပါပြီ။");
+                // ဒီနေရာမှာ Button အသစ်တိုးမယ့် Logic ထည့်နိုင်ပါတယ်
+            }
+        }
+    </script>
+
 </body>
 </html>
-
+  
